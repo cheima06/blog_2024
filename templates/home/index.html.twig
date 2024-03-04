@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+{{chaima}}
+
+<ul>
+    <li>ligne dans mon html</li>
+    {#Redirection avec la fonction twig path()#}
+    <li><a href="{{path('app_home')}}">Home</a></li>
+    <li><a href="{{path('app_contact')}}">Contact</a></li>
+    <li><a href="{{path('app_articles')}}">Articles</a></li>
+
+
+    
+</ul>
+{% endblock %}
