@@ -55,7 +55,7 @@ class Category
     {
         $this->description = $description;
 
-        return $this;
+         return $this;
     }
 
     /**

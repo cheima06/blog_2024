@@ -3,7 +3,16 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
+
+{#charger mes categories#}
+    <ul class="list-group">
+        {% for category in categories %}
+            <li class="list-group-item"><a href="{{path('app_get_article_by_category', {id_category:category.id} )}}">{{ category.title }}"</a></li>
+        {% endfor %}
+    </ul>
+
 {{chaima}}
+
 
 <ul>
     <li>ligne dans mon html</li>
@@ -11,8 +20,6 @@
     <li><a href="{{path('app_home')}}">Home</a></li>
     <li><a href="{{path('app_contact')}}">Contact</a></li>
     <li><a href="{{path('app_articles')}}">Articles</a></li>
-
-
     
 </ul>
 {% endblock %}

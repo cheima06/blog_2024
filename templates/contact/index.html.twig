@@ -2,8 +2,10 @@
 
 {% block title %}Hello ContactController!{% endblock %}
 
+{% form_theme contactForm 'bootstrap_5_layout.html.twig' %}
+
 {% block body %}
 
-{{chaima}}
+{{ form(contactForm) }}
 
 {% endblock %}
