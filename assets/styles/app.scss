@@ -1,5 +1,10 @@
 @import "~bootstrap/scss/bootstrap";
 
+* {
+    color: black !important;
+}
 body {
     background-color: rgb(183, 226, 247);
 }
+
+a { text-decoration: none;}
