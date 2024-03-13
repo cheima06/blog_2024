@@ -6,8 +6,11 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -17,12 +20,56 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('name',)
-        ->add('firstname')
-        ->add('adresse')
-        ->add('numberphone')
-        ->add('email')
-        ->add('agreeTerms', CheckboxType::class, [
+            ->add('name', TextType::class, [
+                'label' => 'Nom',
+                'attr' => ['placeholder' => 'Votre nom'],
+                'row_attr' => ['class' => 'col-md-6'],
+                'constraints' => [
+                    new NotBlank(['message' => 'Votre nom doit être renseigné']),
+                    new Length(['min' => 2, 'minMessage' => 'Votre nom doit faire minimum 2 caractères']),
+                ]
+            ])
+
+            ->add('firstname', TextType::class, [
+                'label' => 'Prénom',
+                'attr' => ['placeholder' => 'Votre prénom'],
+                'row_attr' => ['class' => 'col-md-6'],
+                'constraints' => [
+                    new NotBlank(['message' => 'Votre prénom doit être renseigné']),
+                    new Length(['min' => 2,'max'=>255, 'minMessage' => 'Votre prénom doit faire minimum 2 caractères']),
+                ]
+            ])
+
+            ->add('adresse', TextType::class, [
+                'label' => 'Adresse',
+                'attr' => ['placeholder' => 'Votre Adresse'],
+                'row_attr' => ['class' => 'col-md-6'],
+                'constraints' => [
+                    new NotBlank(['message' => 'Votre adresse doit etre renseigner',])
+                ],
+            ])
+
+            ->add('numberphone', TextType::class, [
+                'label' => 'Numero ',
+                'attr' => ['placeholder' => 'Votre numero de telephone'],
+                'row_attr' => ['class' => 'col-md-6'],
+                'constraints' => [
+                    new NotBlank(['message' => 'Votre numéro de téléphone doit être renseigné']),
+                    new Length(['min' => 10, 'max' => 10, 'exactMessage' => 'votre numéro de telephone doit contenir 10 chiffres']),
+                ]
+            ])
+
+            ->add('email', TextType::class, [
+                'label' => 'Email',
+                'attr' => ['placeholder' => 'Votre email'],
+                'row_attr' => ['class' => 'col-md-7'],
+                'constraints' => [
+                    new NotBlank(['message' => 'Votre email doit être renseigné']),
+                    new Email(['message' => 'Veuillez renseigner un email valide! '])
+                ]
+            ])
+
+            ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
@@ -30,24 +77,38 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-        ->add('plainPassword', PasswordType::class, [
+            ->add('plainPassword', RepeatedType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a password',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
-                    ]),
+                'type' => PasswordType::class,
+                //'attr' => ['autocomplete' => 'new-password',],
+                //'row_attr' => ['class'=>'col-md-6'],
+                'first_options' => [
+                    'constraints' => [
+                        new NotBlank([
+                            'message' => 'Veuillez renseigner un mot de passe',
+                        ]),
+                        new Length([
+                            'min' => 6,
+                            'minMessage' => 'Your password should be at least {{ limit }} characters',
+                            // max length allowed by Symfony for security reasons
+                            'max' => 4096,
+                        ]),
+                    ],
+                    'label' => 'Nouveau Mot de Passe',
+                    'row_attr' => [
+                        'class' => 'col-md-6'
+                    ]
                 ],
+                'second_options' => [
+                    'label' => 'Répétez le nouveau mot de passe',
+                    'row_attr' => [
+                        'class' => 'col-md-6'
+                    ]
+                ],
+                'invalid_message' => 'Les mots de passe ne correspondent pas',
             ])
-
         ;
     }
 

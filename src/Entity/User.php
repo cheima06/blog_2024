@@ -38,43 +38,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $isVerified = false;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le champ {{ label }} ne peut pas être vide !")]
-    #[Assert\Length(
-        min: 2,
-        max: 100,
-        minMessage: 'Your name must be at least {{ limit }} characters long',
-        maxMessage: 'Your name cannot be longer than {{ limit }} characters',
-    )]
+
+
     private ?string $adresse = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le champ {{ label }} ne peut pas être vide !")]
-    #[Assert\Length(
-        min: 10,
-        max: 15,
-        minMessage: 'Your name must be at least {{ limit }} characters long',
-        maxMessage: 'Your name cannot be longer than {{ limit }} characters',
-    )]
+    #[ORM\Column(length: 10)]
+
     private ?string $number = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le champ {{ label }} ne peut pas être vide !")]
-    #[Assert\Length(
-        min: 2,
-        max: 50,
-        minMessage: 'Your name must be at least {{ limit }} characters long',
-        maxMessage: 'Your name cannot be longer than {{ limit }} characters',
-    )]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le champ {{ label }} ne peut pas être vide !")]
-    #[Assert\Length(
-        min: 2,
-        max: 50,
-        minMessage: 'Your first name must be at least {{ limit }} characters long',
-        maxMessage: 'Your first name cannot be longer than {{ limit }} characters',
-    )]
     private ?string $firstName = null;
 
     public function getId(): ?int
@@ -207,7 +182,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setFirstName(string $firstName): static
     {
-        $this->first_name = $firstName;
+        $this->firstName = $firstName;
 
         return $this;
     }

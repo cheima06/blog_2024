@@ -25,7 +25,7 @@
     <div class="row justify-content-center">
 		<div class="row col-md-8">
 
-            {{ form_start(contactForm, { 'attr': {'class': 'row'} }) }}
+            {{ form_start(contactForm, { 'attr': {'class': 'row' ,'novalidate': 'novalidate'} }) }}
 
                {% if errors is not null  %}
 				{% for error in errors %}
