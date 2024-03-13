@@ -24,8 +24,13 @@
                     <div class="col-md-2 d-flex flex-column ms-3">
                         <h3>{{article.title}}</h3>
                         <p>{{article.description}}</p>
+
                         <a class="btn btn-info" href="{{ path('app_article_show', {'id': article.id}) }}">show</a>
-                        <a class="btn btn-secondary" href="{{ path('app_article_edit', {'id': article.id}) }}">edit</a>
+                        
+                        {% if app.user and 'ROLE_ADMIN' in app.user.getroles()  %}
+                            <a class="btn btn-warning" href="{{ path('app_article_edit', {'id': article.id}) }}">edit</a>
+                        {% endif %}
+                        
                     </div> 
 
                 </div>
