@@ -26,7 +26,7 @@ class RegistrationFormType extends AbstractType
                 'row_attr' => ['class' => 'col-md-6'],
                 'constraints' => [
                     new NotBlank(['message' => 'Votre nom doit être renseigné']),
-                    new Length(['min' => 2, 'minMessage' => 'Votre nom doit faire minimum 2 caractères']),
+                    new Length(['min' => 2,'max'=>255, 'minMessage' => 'Votre nom doit faire minimum 2 caractères']),
                 ]
             ])
 
@@ -49,7 +49,7 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
 
-            ->add('numberphone', TextType::class, [
+            ->add('number', TextType::class, [
                 'label' => 'Numero ',
                 'attr' => ['placeholder' => 'Votre numero de telephone'],
                 'row_attr' => ['class' => 'col-md-6'],

@@ -4,14 +4,8 @@
 
 {% block body %}
 
-{#
-    {{app.user.name}} 
-    {{app.user.firstName}} 
+  {% include "flash.html.twig" %} 
 
-    {{app.user.numberPhone}} 
-
-    {{app.user.adresse}} 
-    {{app.user.email}} #}
  <h3>Mon profil</h3>
     <div class="row justify-content-center">
       <div class="col-md-6">
@@ -31,7 +25,7 @@
             </tr>
             <tr>
               <th scope="row">Numero de telephone</th>
-              <td>{{app.user.numberPhone}}</td>
+              <td>{{app.user.number}}</td>
             </tr>
             <tr>
               <th scope="row">E-mail</th>
@@ -39,16 +33,10 @@
             </tr>
           </tbody>
         </table>
+          <a class="btn btn-primary" href="{{path('app_profile_edit')}}">Modifier informations</a>
+          <a class="btn btn-warning" href="{{path('app_profile_password_edit')}}">Modifier Mot de passe</a>
+          <a class="btn btn-danger" href="">Supprimer mon compte </a> 
       </div>
     </div>
-
-
-
-
-
-
-
-
-
 
 {% endblock %}
