@@ -5,9 +5,12 @@ namespace App\Controller;
 use App\Entity\Contact;
 use App\Form\ContactType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -18,7 +21,8 @@ class ContactController extends AbstractController
     #[Route('/contact', name: 'app_contact')]
     public function index(Request $request,
      EntityManagerInterface $entityManager,
-     ValidatorInterface $validator): Response
+     ValidatorInterface $validator,
+     MailerInterface $mailer): Response
     {
             $contact = new Contact();
     
@@ -37,7 +41,23 @@ class ContactController extends AbstractController
                         'success',
                         'Votre message a bien été envoyé'
                     );
-    
+                    $data=$form->getData();
+
+                    $email= (new TemplatedEmail())
+
+                    ->from($this->getParameter('app.mailAddress'))
+                    ->to($this->getParameter('app.mailAddress'))
+                    ->cc($contact->getEmail())
+                    ->subject($contact->getObject())
+                    ->text('envoie mail')
+                    //->html('contenu de l\'email');
+                    ->htmlTemplate("emails/contact.html.twig")
+                    ->context([
+                        'contact' => $contact,
+                    ]);
+                    $mailer->send($email);
+                    
+
                     // rediriger vers une autre page
                     // return $this->redirectToRoute(/* ... */);
                 }

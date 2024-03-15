@@ -36,6 +36,14 @@ class ContactType extends AbstractType
                 'row_attr' => ['class' => 'col-md-6', 'id' => '...'],
 
                 ])
+                ->add('Email', TextType::class, [
+                    'label' => 'email',
+                    'attr' => [
+                        'placeholder' => 'Votre email'
+                    ],
+                    'row_attr' => ['class' => 'col-md-6', 'id' => '...'],
+    
+                    ])
             ->add('object', ChoiceType::class, [
                 'label' => 'Sélectionnez un motif',
                 'placeholder' => 'Veuillez choisir une valeur par défaut',
