@@ -1,0 +1,15 @@
+    {% form_theme CommentaireForm 'bootstrap_5_layout.html.twig' %}
+    
+    {{form_start(CommentaireForm, {'attr':{'class':'row mx-auto'}} )}}
+
+        <div class="col-md-8">
+        {{form_row(CommentaireForm.message)}}
+        {{form_row(CommentaireForm._token)}} 
+
+      
+
+    <button type='submit' class='btn btn-info'>Ajouter un commentaire</button>
+
+    </div>
+    {# {render_rest:  veut dire n'affiche pas le reste des autres champs dans mon formulaire #}
+    {{form_end(CommentaireForm,{render_rest:false} )}}

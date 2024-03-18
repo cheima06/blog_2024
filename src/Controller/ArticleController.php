@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\Commentaires;
 use App\Form\ArticleType;
+use App\Form\CommentaireType;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -62,11 +64,30 @@ class ArticleController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_article_show', methods: ['GET'])]
-    public function show(Article $article): Response
+    #[Route('/{id}', name: 'app_article_show', methods: ['GET', 'POST'])]
+    public function show(Article $article, Request $request, EntityManagerInterface $entityManager): Response
     {
+        $commentaire= new Commentaires;
+        $form = $this->createForm(CommentaireType::class,$commentaire);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $commentaire->setName($this->getUser());
+            $commentaire->setArticle($article);
+            $commentaire->setDate(new \DateTime);
+            $commentaire->setIsVerified(false);
+            $entityManager->persist($commentaire);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'succes',
+                'Votre message a bien ete ajouté !'
+            );
+
+        }
         return $this->render('article/show.html.twig', [
             'article' => $article,
+            'CommentaireForm'=>$form,
         ]);
     }
 
@@ -88,7 +109,7 @@ class ArticleController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_article_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'app_article_delete', methods: ['POST'])]
     public function delete(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->request->get('_token'))) {
