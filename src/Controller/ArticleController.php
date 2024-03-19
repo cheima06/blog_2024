@@ -8,12 +8,15 @@ use App\Form\ArticleType;
 use App\Form\CommentaireType;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
+use App\Service\ImageService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/article')]
 class ArticleController extends AbstractController
@@ -27,34 +30,65 @@ class ArticleController extends AbstractController
         $articles = $paginator->paginate(
             $articles= $articleRepository->findAll(), /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            2 /*limit per page*/
+            4 /*limit per page*/
 
         );
-
         
         return $this->render('article/index.html.twig', [
-            'articles' => $articles,
-
-            
+            'articles' => $articles, 
         ]);
     }
 
+
+
     #[Route('/new', name: 'app_article_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, ImageService $imageService): Response
     {
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $fileName = $imageService->CopyImage("picture",$this->getParameter("article_picture_directory"),$form);
+            $article->setPicture($fileName);
             $entityManager->persist($article);
             $entityManager->flush();
 
             $this->addFlash(
                 'succes',
-                'Votre article a bien été ajouté'
+                'Votre article a bien ete ajouté'
             );
 
+            //$imageFile = $form->get('picture')->getData(); // on recup avc get la valeur de limput type name picture
+
+            // this condition is needed because the 'article' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            //if ($imageFile) {
+                //$originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+              //  $safeFilename = $slugger->slug($originalFilename);
+               // $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension(); // cela permet de donner des Id unique pour les photos
+
+                // Move the file to the directory where articles are stored
+              //  try {
+                  //  $imageFile->move(
+                    //    $this->getParameter('article_picture_directory'),
+                     //   $newFilename
+                   // );
+              //  } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+              //  }
+
+                // updates the 'imageFilename' property to store the PDF file name
+                // instead of its contents
+               // $article->setPicture($newFilename);
+           // }
+
+           // $entityManager->persist($article);
+           // $entityManager->flush();
+
+        
             return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
         }
 
